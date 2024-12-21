@@ -1,0 +1,20 @@
+# Node.js dependencies
+node_modules/
+
+# Environment files
+.env
+
+# Logs
+*.log
+
+# OS-specific files (Windows)
+Thumbs.db
+*.tmp
+
+# Editor-specific files
+.vscode/
+.idea/
+
+# Build outputs
+dist/
+build/
