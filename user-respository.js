@@ -1,6 +1,10 @@
 import DBLocal from 'db-local'
+import bcrypt from 'bcrypt'
 import { z } from 'zod'
+
 import crypto from 'crypto'
+
+import { SALT_ROUNDS } from './config.js'
 const { Schema } = new DBLocal({ path: './db' })
 
 const UserSchema = z.object({
@@ -16,7 +20,7 @@ const User = Schema('User', {
 })
 
 export class UserRepository {
-  static create ({ username, password }) {
+  static async create ({ username, password }) {
     UserSchema.parse({ username, password })
 
     // Validación de usuario existente
@@ -28,7 +32,10 @@ export class UserRepository {
 
     const id = crypto.randomUUID()
 
-    User.create({ _id: id, username, password }).save()
+    // Hash de la contraseña
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
+
+    User.create({ _id: id, username, password: hashedPassword }).save()
 
     return id
   }
