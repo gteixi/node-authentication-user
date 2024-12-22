@@ -1,6 +1,7 @@
 import express from 'express'
 import { PORT } from './config.js'
 import { UserRepository } from './user-respository.js'
+import { UserSchema } from './schema/userSchema.js'
 
 const app = express()
 app.use(express.json())
@@ -13,10 +14,16 @@ app.post('/register', async (req, res) => {
   const { username, password } = req.body
 
   try {
+    UserSchema.parse({ username, password })
     const id = await UserRepository.create({ username, password })
     res.send({ id })
   } catch (error) {
-    res.status(400).send({ error: error.errors })
+    // Errores de zod
+    if (error.errors) {
+      return res.status(400).send({ error: error.errors })
+    }
+    // Errores generales
+    res.status(400).send({ error: error.message })
   }
 })
 

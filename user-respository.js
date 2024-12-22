@@ -1,17 +1,11 @@
 import DBLocal from 'db-local'
 import bcrypt from 'bcrypt'
-import { z } from 'zod'
 
 import crypto from 'crypto'
 
 import { SALT_ROUNDS } from './config.js'
+import { UserSchema } from './schema/userSchema.js'
 const { Schema } = new DBLocal({ path: './db' })
-
-const UserSchema = z.object({
-  _id: z.string().uuid().optional(),
-  username: z.string().min(3, 'El nombre de usuario debe tener al menos 3 caracteres'),
-  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres')
-})
 
 const User = Schema('User', {
   _id: { type: String, required: true },
@@ -55,6 +49,8 @@ export class UserRepository {
       throw new Error('Contraseña incorrecta')
     }
 
-    return user
+    const { password: _, ...publicUser } = user
+
+    return publicUser
   }
 }
