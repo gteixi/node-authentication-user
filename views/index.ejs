@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register</title>
+    <style>
+        /* Global styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d0d0d, #1a1a2e, #000000);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Card style */
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .form-container h2 {
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #fff;
+            background-color: #3a3a3a;
+;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #656565;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        p {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        p a {
+            color: #3a3a3a;
+;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mejor estilo para los mensajes */
+        .message {
+            margin-top: 15px; /* Separación del botón */
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            width: 100%; /* Que ocupe todo el ancho del formulario */
+            text-align: center; /* Centrar el texto */
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sutil sombra */
+        }
+
+        .message--success {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message--error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <% if (typeof username !== 'undefined') { %>
+            <!-- Admin Panel -->
+            <div class="form-container">
+                <h2>Bienvenido, <%= username %>!</h2>
+                <p>Has iniciado sesión correctamente.</p>
+                <button id="close-session">Cerrar Sesión</button>
+            </div>
+        <% } else { %>
+            <!-- Login Form -->
+            <div class="form-container">
+                <form id="login-form">
+                    <h2>Iniciar Sesión</h2>
+                    <label for="login-username">Usuario</label>
+                    <input type="text" id="login-username" name="username" required>
+
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" name="password" required>
+
+                    <button type="submit">Iniciar Sesión</button>
+                    <div id="login-error" class="message message--error" style="display: none;"></div>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div class="form-container">
+                <form id="register-form">
+                    <h2>Registrarse</h2>
+                    <label for="register-username">Usuario</label>
+                    <input type="text" id="register-username" name="username" required>
+
+                    <label for="register-password">Contraseña</label>
+                    <input type="password" id="register-password" name="password" required>
+
+                    <label for="register-confirm-password">Confirmar Contraseña</label>
+                    <input type="password" id="register-confirm-password" name="confirm-password" required>
+
+                    <button type="submit">Registrarse</button>
+                    <div id="register-error" class="message message--error" style="display: none;"></div>
+                </form>
+            </div>
+        <% } %>
+    </div>
+
+    <script>
+        const $ = selector => document.querySelector(selector);
+
+        const loginForm = $('#login-form');
+        const loginError = $('#login-error');
+
+        const registerForm = $('#register-form');
+        const registerError = $('#register-error');
+
+        const logoutButton = $('#close-session');
+
+        loginForm?.addEventListener('submit', async e => {
+            e.preventDefault();
+            const username = $('#login-username').value;
+            const password = $('#login-password').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                loginError.textContent = 'Iniciando sesión...';
+                loginError.classList.remove('message--error');
+                loginError.classList.add('message--success');
+                loginError.style.display = 'block';
+                setTimeout(() => (window.location.href = '/protected'), 2000);
+            } else {
+                loginError.textContent = 'Error al iniciar sesión.';
+                loginError.style.display = 'block';
+            }
+        });
+
+        registerForm?.addEventListener('submit', async e => {
+            e.preventDefault();
+            const username = $('#register-username').value;
+            const password = $('#register-password').value;
+            const confirmPassword = $('#register-confirm-password').value;
+
+            if (password !== confirmPassword) {
+                alert('Las contraseñas no coinciden.');
+                return;
+            }
+
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                registerError.textContent = 'Usuario registrado correctamente.';
+                registerError.classList.remove('message--error');
+                registerError.classList.add('message--success');
+                registerError.style.display = 'block';
+                setTimeout(() => (window.location.href = '/protected'), 2000);
+            } else {
+                registerError.textContent = 'Error al registrar usuario.';
+                registerError.style.display = 'block';
+            }
+        });
+
+        logoutButton?.addEventListener('click', async e => {
+            e.preventDefault();
+            await fetch('/logout', { method: 'POST' });
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>
