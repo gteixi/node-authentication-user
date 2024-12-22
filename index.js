@@ -4,10 +4,13 @@ import { UserRepository } from './user-respository.js'
 import { UserSchema } from './schema/userSchema.js'
 
 const app = express()
+
+app.set('view engine', 'ejs')
+
 app.use(express.json())
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.render('index')
 })
 
 app.post('/register', async (req, res) => {
@@ -31,11 +34,21 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body
 
   try {
+    UserSchema.parse({ username, password })
     const user = await UserRepository.login({ username, password })
     res.send(user)
   } catch (error) {
+    // Errores de zod
+    if (error.errors) {
+      return res.status(400).send({ error: error.errors })
+    }
+    // Errores generales
     res.status(400).send({ error: error.message })
   }
+})
+
+app.get('/protected', (req, res) => {
+  res.render('protected')
 })
 
 app.listen(PORT, () => {
