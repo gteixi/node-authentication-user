@@ -68,7 +68,6 @@
             font-weight: bold;
             color: #fff;
             background-color: #3a3a3a;
-;
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -88,7 +87,6 @@
 
         p a {
             color: #3a3a3a;
-;
             text-decoration: none;
             font-weight: bold;
         }
@@ -126,11 +124,12 @@
         <% if (typeof username !== 'undefined') { %>
             <!-- Admin Panel -->
             <div class="form-container">
-                <h2>Bienvenido, <%= username %>!</h2>
+                <h2>Hola, <%= username %>!</h2>
                 <p>Has iniciado sesión correctamente.</p>
                 <button id="close-session">Cerrar Sesión</button>
             </div>
-        <% } else { %>
+        <% } %>
+            <% if (typeof username === 'undefined') { %>
             <!-- Login Form -->
             <div class="form-container">
                 <form id="login-form">
