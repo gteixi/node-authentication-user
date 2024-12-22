@@ -40,5 +40,21 @@ export class UserRepository {
     return id
   }
 
-  static login ({ username, password }) {}
+  static async login ({ username, password }) {
+    UserSchema.parse({ username, password })
+
+    const user = User.findOne({ username })
+
+    if (!user) {
+      throw new Error('Usuario no encontrado')
+    }
+
+    const isValid = await bcrypt.compare(password, user.password)
+
+    if (!isValid) {
+      throw new Error('Contraseña incorrecta')
+    }
+
+    return user
+  }
 }
