@@ -4,7 +4,7 @@ This project is a Node.js application that demonstrates user authentication usin
 
 ## Preview
 
-
+[Watch the demo](./assets/demo.mp4)
 
 ## Features
 
@@ -69,17 +69,21 @@ This project is a Node.js application that demonstrates user authentication usin
 ## API Endpoints
 
 - **POST /register**: Registers a new user.
+
   - Request body: `{ "username": "string", "password": "string" }`
   - Response: `{ "id": "user_id" }` or an error.
 
 - **POST /login**: Authenticates a user and returns a JWT in an HTTP-only cookie.
+
   - Request body: `{ "username": "string", "password": "string" }`
   - Response: The user data or an error.
 
 - **POST /logout**: Logs out the user by clearing the session cookie.
+
   - Response: `{ "message": "Sesión cerrada" }`.
 
 - **GET /protected**: Returns a protected page only accessible to authenticated users.
+
   - Response: The user's session data if authenticated, or an access denied error.
 
 - **GET /**: Displays the home page with user session data if authenticated.
