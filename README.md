@@ -4,7 +4,7 @@ This project is a Node.js application that demonstrates user authentication usin
 
 ## Preview
 
-[Preview](./assets/screenshot.png)
+![Preview](./assets/screenshot.png)
 
 [Watch the demo](./assets/demo.mp4)
 
