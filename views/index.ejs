@@ -221,7 +221,6 @@
                 registerError.classList.remove('message--error');
                 registerError.classList.add('message--success');
                 registerError.style.display = 'block';
-                setTimeout(() => (window.location.href = '/protected'), 2000);
             } else {
                 registerError.textContent = 'Error al registrar usuario.';
                 registerError.style.display = 'block';
