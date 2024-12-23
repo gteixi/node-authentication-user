@@ -13,8 +13,9 @@ This project is a Node.js application that demonstrates user authentication usin
 - **User Registration**: Allows new users to create an account.
 - **User Login**: Enables existing users to log in.
 - **Session Management**: Manages user sessions using cookies.
+- **Protected Routes**: Restricts access to specific routes for authenticated users.
 - **Password Hashing**: Secures user passwords by hashing them before storage.
-- **Input Validation**: Validates user input to ensure data integrity.
+- **Input Validation with Zod**: Validates user input to ensure data integrity and provide detailed error messages.
 
 ## Prerequisites
 
